@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { MotionValue, motion, useScroll, useTransform } from "motion/react";
+import { AnimatePresence, MotionValue, motion, useScroll, useTransform } from "motion/react";
 import { cn } from "@/lib/utils";
 import {
   IconBrightnessDown,
@@ -43,6 +43,10 @@ export const MacbookScroll = ({
   });
 
   const [isMobile, setIsMobile] = useState(false);
+  const [zoomed, setZoomed] = useState(false);
+  const [screenRect, setScreenRect] = useState<DOMRect | null>(null);
+  const screenRef = useRef<HTMLDivElement>(null);
+  const lastTapRef = useRef<number>(0);
 
   useEffect(() => {
     if (window && window.innerWidth < 768) {
@@ -50,59 +54,267 @@ export const MacbookScroll = ({
     }
   }, []);
 
-  // All animations now finish together at 40% scroll
-  const END_SCROLL = 0.4; // adjust to your liking (0.3–0.5 works well)
+  // Escape key to close zoom
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setZoomed(false);
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
 
-  const scaleX = useTransform(scrollYProgress, [0, END_SCROLL], [1.2, 1]);
-  const scaleY = useTransform(scrollYProgress, [0, END_SCROLL], [0.6, 1]);
-  const rotate = useTransform(scrollYProgress, [0.1, 0.12, END_SCROLL], [-28, -28, 0]);
-  const translate = useTransform(scrollYProgress, [0, END_SCROLL], [0, 200]); // stops at same time
+  useEffect(() => {
+    if (zoomed) {
+      const original = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = original;
+      };
+    }
+  }, [zoomed]);
+
+  const handleScreenInteract = () => {
+    const now = Date.now();
+    const DOUBLE_TAP_MS = 350;
+    if (now - lastTapRef.current < DOUBLE_TAP_MS) {
+      // Double tap detected
+      if (screenRef.current) {
+        setScreenRect(screenRef.current.getBoundingClientRect());
+      }
+      setZoomed((z) => !z);
+    }
+    lastTapRef.current = now;
+  };
+
+  // Single scroll range — entire laptop tilts as one rigid body.
+  const END_SCROLL = 0.7;
+
+  // The base should finish edge-on to the viewer: keyboard/top surface hidden,
+  // only the front lip visible. The lid counter-rotates through the hinge so
+  // the screen finishes front-facing.
+  const assemblyRotateX = useTransform(scrollYProgress, [0, END_SCROLL], [52, 90]);
+  const lidHingeAngle = useTransform(scrollYProgress, [0, END_SCROLL], [112, 90]);
+
+  // Small framing compensation while the base flattens into a line.
+  const assemblyY = useTransform(scrollYProgress, [0, END_SCROLL], [20, 150]);
+  const assemblyZ = useTransform(scrollYProgress, [0, END_SCROLL], [100, 40]);
 
   const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const textTranslate = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
 
   return (
-    <div
-      ref={ref}
-      className="relative min-h-[200vh] w-full"
-    >
-      {/* Sticky stage — laptop stays pinned while parent scroll region plays out */}
-      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden [perspective:800px]">
-        <div className="flex scale-[0.35] flex-col items-center sm:scale-[0.5] md:scale-[0.75] lg:scale-90">
-          {/* Lid */}
-          <Lid
-            src={src}
-            scaleX={scaleX}
-            scaleY={scaleY}
-            rotate={rotate}
-            translate={translate}
-          />
-          {/* Base area */}
-          <div className="relative -z-10 h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
-            <div className="relative h-10 w-full">
-              <div className="absolute inset-x-0 mx-auto h-4 w-[80%] bg-[#050505]" />
+    <div ref={ref} className="relative min-h-[200vh] w-full">
+      {/* Sticky stage */}
+      <div className="sticky top-0 flex h-screen w-full items-center justify-center overflow-hidden [perspective:1400px]">
+        <div className="scale-[0.35] sm:scale-[0.5] md:scale-[0.75] lg:scale-90 [transform-style:preserve-3d]">
+          {/* ASSEMBLY — lid + base move as one rigid object */}
+          <motion.div
+            style={{
+              rotateX: assemblyRotateX,
+              translateY: assemblyY,
+              translateZ: assemblyZ,
+              transformStyle: "preserve-3d",
+              transformOrigin: "bottom center",
+            }}
+            className="relative flex flex-col items-center [transform-style:preserve-3d]"
+          >
+            {/* BASE — keyboard deck. This is the anchor; the lid hinges off its top edge. */}
+            <div
+              className="relative h-[23rem] w-[32rem] rounded-2xl bg-[#272729] p-2 [transform-style:preserve-3d]"
+            >
+              {/* 3D Extrusion layers to give base girth */}
+              {[...Array(6)].map((_, i) => (
+                <div
+                  key={`extrusion-${i}`}
+                  className="absolute inset-0 rounded-2xl bg-[#1c1c1c]"
+                  style={{ transform: `translateZ(-${(i + 1) * 2}px)` }}
+                />
+              ))}
+              {/* Base Bottom */}
+              <div
+                className="absolute inset-0 rounded-2xl bg-[#1c1c1c]"
+                style={{
+                  transform: "translateZ(-14px)",
+                }}
+              />
+              {/* LID — positioned at the base's top edge, hinged from its bottom. */}
+              <div
+                className="absolute left-0 right-0 top-0 [transform-style:preserve-3d]"
+                style={{ transformStyle: "preserve-3d" }}
+              >
+                <motion.div
+                  style={{
+                    rotateX: lidHingeAngle,
+                    transformOrigin: "top center",
+                    transformStyle: "preserve-3d",
+                  }}
+                  className="relative h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
+                >
+                  {/* Lid extrusion layers to give it thickness */}
+                  {[...Array(4)].map((_, i) => (
+                    <div
+                      key={`lid-extrusion-${i}`}
+                      className="absolute inset-0 rounded-2xl bg-[#272729]"
+                      style={{ transform: `translateZ(-${i + 1}px)` }}
+                    />
+                  ))}
+                  {/* Lid back (visible when lid faces away — i.e. start of scroll) */}
+                  <div
+                    style={{
+                      transform: "rotateY(180deg) translateZ(4px)",
+                      backfaceVisibility: "hidden",
+                    }}
+                    className="absolute inset-0 flex items-center justify-center rounded-2xl m-2 bg-[#0a0a0a]"
+                  >
+                    {/* <span className="text-white opacity-60">
+                      <AceternityLogo />
+                    </span> */}
+                    {/* Clickable screen surface */}
+                    <div
+                      ref={screenRef}
+                      onClick={handleScreenInteract}
+                      className="absolute inset-2 rounded-lg cursor-pointer overflow-hidden"
+                      title="Double-click to zoom"
+                    >
+                      {src && (
+                        <img
+                          src={src}
+                          alt="screen"
+                          className="h-full w-full rounded-lg object-cover object-left-top select-none"
+                          draggable={false}
+                        />
+                      )}
+                      {/* Subtle double-click hint */}
+                      <div className="absolute inset-0 flex items-end justify-center pb-3 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        <span className="text-white/50 text-[8px] bg-black/40 px-2 py-0.5 rounded-full backdrop-blur-sm">
+                          double-click to expand
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Lid front — bezel + screen */}
+                  <div className="absolute inset-0 rounded-lg bg-[#272729]" />
+
+                </motion.div>
+              </div>
+
+              {/* BASE TOP — keyboard deck content (visible when looking down at it) */}
+              <div className="relative -z-10 h-full w-full overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#0a0a0a]">
+                <div className="relative h-10 w-full">
+                  <div className="absolute inset-x-0 mx-auto h-4 w-[80%] bg-[#050505]" />
+                </div>
+                <div className="relative flex">
+                  <div className="mx-auto h-full w-[10%] overflow-hidden">
+                    <SpeakerGrid />
+                  </div>
+                  <div className="mx-auto h-full w-[80%]">
+                    <Keypad />
+                  </div>
+                  <div className="mx-auto h-full w-[10%] overflow-hidden">
+                    <SpeakerGrid />
+                  </div>
+                </div>
+                <Trackpad />
+                <div className="absolute inset-x-0 bottom-0 mx-auto h-2 w-20 rounded-tl-3xl rounded-tr-3xl bg-gradient-to-t from-[#272729] to-[#050505]" />
+                {showGradient && (
+                  <div className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black" />
+                )}
+                {badge && <div className="absolute bottom-4 left-4">{badge}</div>}
+              </div>
             </div>
-            <div className="relative flex">
-              <div className="mx-auto h-full w-[10%] overflow-hidden">
-                <SpeakerGrid />
-              </div>
-              <div className="mx-auto h-full w-[80%]">
-                <Keypad />
-              </div>
-              <div className="mx-auto h-full w-[10%] overflow-hidden">
-                <SpeakerGrid />
-              </div>
-            </div>
-            <Trackpad />
-            <div className="absolute inset-x-0 bottom-0 mx-auto h-2 w-20 rounded-tl-3xl rounded-tr-3xl bg-gradient-to-t from-[#272729] to-[#050505]" />
-            {showGradient && (
-              <div className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black" />
-            )}
-            {badge && <div className="absolute bottom-4 left-4">{badge}</div>}
-          </div>
+          </motion.div>
         </div>
       </div>
+      {/* Fullscreen zoom overlay — rendered outside 3D context */}
+      <ScreenTakeoverOverlay
+        src={src}
+        zoomed={zoomed}
+        onClose={() => setZoomed(false)}
+        originRect={screenRect}
+      />
     </div>
+  );
+};
+
+// ─── Screen takeover overlay ───────────────────────────────────────────────
+const ScreenTakeoverOverlay = ({
+  src,
+  zoomed,
+  onClose,
+  originRect,
+}: {
+  src?: string;
+  zoomed: boolean;
+  onClose: () => void;
+  originRect: DOMRect | null;
+}) => {
+  return (
+    <AnimatePresence>
+      {zoomed && originRect && (
+        <>
+          {/* Backdrop — masks the rest of the laptop scene as the screen expands */}
+          <motion.div
+            key="screen-takeover-backdrop"
+            className="fixed inset-0 z-[9998] bg-black"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          />
+
+          {/* The screen itself, morphing from its laptop position to fullscreen */}
+          <motion.div
+            key="screen-takeover"
+            className="fixed z-[9999] overflow-hidden bg-black cursor-zoom-out"
+            initial={{
+              top: originRect.top,
+              left: originRect.left,
+              width: originRect.width,
+              height: originRect.height,
+              borderRadius: 12,
+            }}
+            animate={{
+              top: 0,
+              left: 0,
+              width: window.innerWidth,
+              height: window.innerHeight,
+              borderRadius: 0,
+            }}
+            exit={{
+              top: originRect.top,
+              left: originRect.left,
+              width: originRect.width,
+              height: originRect.height,
+              borderRadius: 12,
+              opacity: 0,
+            }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            onDoubleClick={onClose}
+          >
+            {src && (
+              <img
+                src={src}
+                alt="screen fullscreen"
+                className="h-full w-full object-cover object-left-top select-none"
+                draggable={false}
+              />
+            )}
+
+            {/* <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.3, duration: 0.3 }}
+              onClick={onClose}
+              className="absolute top-5 right-5 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/30 text-sm text-white/50 backdrop-blur-sm transition-all hover:bg-black/50 hover:text-white"
+              aria-label="Close"
+            >
+              ✕
+            </motion.button> */}
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   );
 };
 
@@ -120,26 +332,7 @@ export const Lid = ({
   src?: string;
 }) => {
   return (
-    <div className="relative [perspective:800px]">
-      <div
-        style={{
-          transform: "perspective(800px) rotateX(-25deg) translateZ(0px)",
-          transformOrigin: "bottom",
-          transformStyle: "preserve-3d",
-        }}
-        className="relative h-[12rem] w-[32rem] rounded-2xl bg-[#010101] p-2"
-      >
-        <div
-          style={{
-            boxShadow: "0px 2px 0px 2px #171717 inset",
-          }}
-          className="absolute inset-0 flex items-center justify-center rounded-lg bg-[#010101]"
-        >
-          <span className="text-white">
-            <AceternityLogo />
-          </span>
-        </div>
-      </div>
+    <div className="relative h-96 w-[32rem] [perspective:800px]">
       <motion.div
         style={{
           scaleX: scaleX,
@@ -151,6 +344,26 @@ export const Lid = ({
         }}
         className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
       >
+        <div
+          style={{
+            transform: "perspective(800px) rotateX(-25deg) translateZ(0px)",
+            transformOrigin: "bottom",
+            transformStyle: "preserve-3d",
+          }}
+          className="relative h-[12rem] w-[32rem] rounded-2xl bg-[#010101] p-2"
+        >
+          <div
+            style={{
+              boxShadow: "0px 2px 0px 2px #666666 inset",
+            }}
+            className="absolute inset-0 flex items-center justify-center rounded-lg bg-[#666666]"
+          >
+            <span className="text-white">
+              <AceternityLogo />
+            </span>
+          </div>
+        </div>
+
         <div className="absolute inset-0 rounded-lg bg-[#272729]" />
         <img
           src={src as string}
