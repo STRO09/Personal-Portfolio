@@ -445,11 +445,15 @@ h1 {
   overflow: hidden;
 }
 .project-header {
-  padding: 16px 20px 12px;
-  border-bottom: 1px solid var(--border);
+  padding: 16px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.project-header:hover {
+  background: var(--bg3);
 }
 .project-name {
   font-size: 13px;
@@ -479,7 +483,17 @@ h1 {
   border: 1px solid rgba(232, 168, 50, 0.3);
 }
 .project-body {
+  padding: 0 20px;
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.4s ease,
+    padding 0.3s;
+}
+.project-body.open {
+  max-height: 2000px;
   padding: 16px 20px;
+  border-top: 1px solid var(--border);
 }
 .project-desc {
   font-size: 12px;
