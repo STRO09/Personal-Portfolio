@@ -34,6 +34,7 @@ function Navbar({ underlineStyle }) {
         <a href="#projects">Projects</a>
         <a href="#skills">Stack</a>
         <a href="#contact">Contact</a>
+        <a href="https://drive.google.com/drive/folders/1L5YIGVPIyr6R5wi5yJP4vYrN3j496soM">↗ Resume</a>
       </div>
       <div className="nav-status">
         <div className="status-dot"></div>
