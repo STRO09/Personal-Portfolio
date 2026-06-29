@@ -11,6 +11,7 @@ import SkillBar from "../components/ui/SkillBar";
 // Feature modules
 import TerminalBoot from "../components/TerminalBoot";
 import ContactCard from "../components/ContactCard";
+import InteractiveTerminal from "../components/InteractiveTerminal";
 import {
   TopologyDiagram,
   RequestFlowDiagram,
@@ -47,7 +48,9 @@ function Hero() {
     <section id="hero">
       <div className="hero-left">
         <Reveal delay={100}>
-          <div className="hero-tag">Backend · Full-Stack · Systems</div>
+          <div className="hero-tag">
+            Backend Engineer · Distributed Systems · Reliable Applications
+          </div>
         </Reveal>
         <Reveal delay={200}>
           <h1>
@@ -58,16 +61,19 @@ function Hero() {
         </Reveal>
         <Reveal delay={350}>
           <p className="hero-sub">
-            Building scalable REST APIs, real-time systems, and distributed
-            architectures. Currently shipping production features at SlashRTC —
-            a Mumbai-based RTC startup — across a 15+ microservices telephony
-            platform.
+            I enjoy understanding how complex software works under the hood.
+            Distributed systems, real-time communication, databases, APIs, and
+            everything in between. Most of my time is spent building, debugging,
+            and improving backend systems that solve real engineering problems.
           </p>
         </Reveal>
         <Reveal delay={500}>
           <div className="hero-links">
             <Magnetic strength={0.12}>
-              <a href="mailto:sagarjanjoted123@gmail.com" className="btn btn-primary">
+              <a
+                href="mailto:sagarjanjoted123@gmail.com"
+                className="btn btn-primary"
+              >
                 → Get in touch
               </a>
             </Magnetic>
@@ -93,7 +99,7 @@ function Hero() {
         </Reveal>
       </div>
       <div className="hero-right">
-        <Reveal delay={400} className="w-full">
+        {/* <Reveal delay={400} className="w-full">
           <div className="terminal">
             <div className="term-bar">
               <div className="term-btn" style={{ background: "#e05252" }}></div>
@@ -149,9 +155,146 @@ function Hero() {
               </div>
             </div>
           </div>
+        </Reveal> */}
+        <Reveal delay={400} className="w-full">
+          <InteractiveTerminal />
         </Reveal>
       </div>
     </section>
+  );
+}
+
+function WhatIDo() {
+  const [expanded, setExpanded] = useState({});
+  const cards = [
+    {
+      headline: "Reliable & Secure Backend",
+      body: "I design and build production-ready backend systems with secure REST APIs, authentication, authorization, background jobs, scalable data models, efficient indexing, and optimized database queries. I'm comfortable building reliable services in Java and Node.js using both relational and NoSQL databases.",
+      tags: [
+        "Java",
+        "Spring Boot",
+        "Node.js",
+        "Express.js",
+        "Hibernate",
+        "JDBC",
+        "REST APIs",
+        "Access + Refresh Token",
+        "RBAC",
+        "PostgreSQL",
+        "MongoDB",
+        "Redis",
+        "ScyllaDB",
+      ],
+    },
+    {
+      headline: "Distributed & Real-Time Systems",
+      body: "I enjoy working on systems where multiple services need to communicate reliably. From real-time communication and event-driven workflows to debugging production issues across microservices, queues, and databases, I like solving problems that span the entire system.",
+      tags: [
+        "WebSockets",
+        "Microservices",
+        "Redis",
+        "Bull Queues",
+        "Event-Driven",
+        "ScyllaDB",
+        "Debugging",
+      ],
+    },
+    {
+      headline: "Modern Frontend Development",
+      body: "I build responsive and maintainable user interfaces using React and Next.js. While backend engineering is my primary focus, I'm comfortable taking features from API to UI and enjoy building interfaces that are clean, fast, and practical.",
+      tags: [
+        "React",
+        "Next.js",
+        "Redux",
+        "JavaScript",
+        "TypeScript",
+        "Tailwind CSS",
+        "HTML5",
+        "CSS3",
+        "Responsive UI",
+        "API Integration",
+      ],
+    },
+    {
+      headline: "End-to-End Product Delivery",
+      body: "I enjoy taking ownership of features from implementation through testing, deployment, and production support. Working in a small engineering team has taught me to move comfortably across the backend, frontend, databases, and infrastructure whenever the product needs it.",
+      tags: [
+        "Git",
+        "GitHub",
+        "Docker",
+        "GitHub Actions",
+        "CI/CD",
+        "Render",
+        "Vercel",
+        "Postman",
+        "Agile",
+        "Production Support",
+      ],
+    },
+  ];
+
+  return (
+    <div className="section">
+      <Reveal className="w-full">
+        <div className="sec-header">
+          <span className="sec-title">WHAT I CAN DO</span>
+          <div className="sec-line"></div>
+        </div>
+        <p
+          style={{
+            fontSize: "12px",
+            color: "var(--text2)",
+            fontFamily: "var(--sans)",
+            lineHeight: "1.7",
+            marginBottom: "1.5rem",
+            maxWidth: "100%",
+          }}
+        >
+          {/* If you're a founder or PM evaluating whether I'm the right fit —
+          here's what I can actually deliver for your product, without the
+          jargon. */}
+          The engineering work I enjoy most—and the problems I can help solve.
+        </p>
+      </Reveal>
+      <div className="wib-grid">
+        {cards.map((card, i) => {
+          const isExpanded = expanded[i];
+          const visibleTags = isExpanded ? card.tags : card.tags.slice(0, 3);
+
+          return (
+            <Reveal key={i} delay={i * 80} className="w-full">
+              <div className="wib-card">
+                <div className="wib-headline">{card.headline}</div>
+
+                <p className="wib-body">{card.body}</p>
+
+                <div className="wib-tags">
+                  {visibleTags.map((t) => (
+                    <span key={t} className="tag">
+                      {t}
+                    </span>
+                  ))}
+
+                  {!isExpanded && card.tags.length > 3 && (
+                    <button
+                      className="tag tag-expand"
+                      onClick={() =>
+                        setExpanded((prev) => ({
+                          ...prev,
+                          [i]: true,
+                        }))
+                      }
+                    >
+                      +{card.tags.length - 3}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </Reveal>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
@@ -162,27 +305,27 @@ function Metrics() {
         <div className="metrics-row">
           <div className="metric">
             <span className="metric-val">
-              <CountUp value="15+" />
+              <CountUp value="1+" />
             </span>
-            <div className="metric-label">Node.js Microservices</div>
-          </div>
-          <div className="metric">
-            <span className="metric-val">
-              <CountUp value="50ms" />
-            </span>
-            <div className="metric-label">Chat Latency Achieved</div>
-          </div>
-          <div className="metric">
-            <span className="metric-val">
-              <CountUp value="100k+" />
-            </span>
-            <div className="metric-label">Messages per Chat</div>
+            <div className="metric-label">Years of Experience</div>
           </div>
           <div className="metric">
             <span className="metric-val">
               <CountUp value="150+" />
             </span>
             <div className="metric-label">DSA Problems Solved</div>
+          </div>
+          <div className="metric">
+            <span className="metric-val">
+              <CountUp value="400+" />
+            </span>
+            <div className="metric-label">Commits Last year</div>
+          </div>
+          <div className="metric">
+            <span className="metric-val">
+              <CountUp value="15+" />
+            </span>
+            <div className="metric-label">Technologies used</div>
           </div>
         </div>
       </Reveal>
@@ -206,12 +349,11 @@ function CollapsibleCard({
         className={headerClass}
         onClick={() => setIsOpen(!isOpen)}
         style={{ cursor: "pointer" }}
+        title={isOpen ? "Click to collapse" : "Click to expand"}
       >
         {headerContent}
       </div>
-      <div className={`${bodyClass} ${isOpen ? "open" : ""}`}>
-        {children}
-      </div>
+      <div className={`${bodyClass} ${isOpen ? "open" : ""}`}>{children}</div>
     </div>
   );
 }
@@ -259,16 +401,17 @@ function Experience() {
             <span className="tag">CodeIgniter 3</span>
           </div>
           <div className="exp-detail">
-            Building full-stack features in a 3-engineer team, driving the product from active
-            development through UAT into production rollout.
+            Building full-stack features in a 3-engineer team, driving the
+            product from active development through UAT into production rollout.
           </div>
           <div className="exp-detail">
-            Implemented real-time 1:1 and group chat using CI3, Node.js, Socket.IO, and MongoDB
-            across a production telephony product.
+            Debugged and resolved cross-cutting issues in a distributed
+            telephony system spanning 15+ Node.js microservices, Redis (Bull)
+            job queues, and FreeSWITCH ESL.
           </div>
           <div className="exp-detail">
-            Debugged and resolved cross-cutting issues in a distributed telephony system spanning
-            15+ Node.js microservices, Redis (Bull) job queues, and FreeSWITCH ESL.
+            Built projects including a real-time messaging platform with live 1:1 and group messaging using CI3, Node.js,
+            Socket.IO, and MongoDB across a production telephony product.
           </div>
 
           <TopologyDiagram />
@@ -286,7 +429,9 @@ function Experience() {
             <>
               <div>
                 <div className="exp-company">SDAC INFOTECH — Mumbai</div>
-                <div className="exp-role">Java Development Trainee + Intern</div>
+                <div className="exp-role">
+                  Java & Full Stack Development Trainee + Intern
+                </div>
               </div>
               <div className="exp-period">Jul 2024 – Oct 2024</div>
             </>
@@ -300,12 +445,12 @@ function Experience() {
             <span className="tag">MVC2 Pattern</span>
           </div>
           <div className="exp-detail">
-            Built an ERP-style e-commerce portal using Java Servlets, JDBC, JSP, and MySQL
-            following MVC2 architectural pattern.
+            Built an ERP-style e-commerce portal using Java Servlets, JDBC, JSP,
+            and MySQL following MVC2 architectural pattern.
           </div>
           <div className="exp-detail">
-            Covered core inventory, order, and user management workflows end-to-end across the
-            full J2EE stack.
+            Covered core inventory, order, and user management workflows
+            end-to-end across the full J2EE stack.
           </div>
         </CollapsibleCard>
       </Reveal>
@@ -335,14 +480,17 @@ function Projects() {
             headerContent={
               <>
                 <div className="project-name">AI Chat-App</div>
-                <span className="project-type type-realtime">Real-Time System</span>
+                <span className="project-type type-realtime">
+                  Real-Time System
+                </span>
               </>
             }
           >
             <p className="project-desc">
-              A real-time messaging platform with secure JWT + refresh token auth. An AI
-              participant is treated as a first-class user — not a plugin bolted on. Optimized
-              for 100k+ messages per conversation through strategic compound indexing.
+              A real-time messaging platform with secure JWT + refresh token
+              auth. An AI participant is treated as a first-class user — not a
+              plugin bolted on. Optimized for 100k+ messages per conversation
+              through strategic compound indexing.
             </p>
 
             <RequestFlowDiagram />
@@ -370,7 +518,11 @@ function Projects() {
 
             <div className="project-links mt-4">
               <Magnetic strength={0.12}>
-                <a href="https://github.com/STRO09" target="_blank" className="plink">
+                <a
+                  href="https://github.com/STRO09/ChatApp-CodeIgniter3-Nodejs"
+                  target="_blank"
+                  className="plink"
+                >
                   ⎋ GitHub
                 </a>
               </Magnetic>
@@ -393,9 +545,10 @@ function Projects() {
             }
           >
             <p className="project-desc">
-              Dual-role ERP-style system covering 10+ workflows and a 4-stage order lifecycle.
-              Designed to SRS requirements with a normalized relational schema, stored
-              procedures, and triggers for inventory consistency.
+              Dual-role ERP-style system covering 10+ workflows and a 4-stage
+              order lifecycle. Designed to SRS requirements with a normalized
+              relational schema, stored procedures, and triggers for inventory
+              consistency.
             </p>
 
             <StackDiagram />
@@ -417,7 +570,11 @@ function Projects() {
 
             <div className="project-links mt-4">
               <Magnetic strength={0.12}>
-                <a href="https://github.com/STRO09" target="_blank" className="plink">
+                <a
+                  href="https://github.com/STRO09/Ecommerce_Portal"
+                  target="_blank"
+                  className="plink"
+                >
                   ⎋ GitHub
                 </a>
               </Magnetic>
@@ -434,15 +591,20 @@ function Projects() {
             initiallyOpen={false}
             headerContent={
               <>
-                <div className="project-name">Issues &amp; Deployment Tracker</div>
-                <span className="project-type type-infra">Infra · CI/CD · Live</span>
+                <div className="project-name">
+                  Issues &amp; Deployment Tracker
+                </div>
+                <span className="project-type type-infra">
+                  Infra · CI/CD · Live
+                </span>
               </>
             }
           >
             <p className="project-desc">
-              Production-style issue tracking with role-based access control and clear
-              authorization boundaries across user roles. Fully deployed with CI/CD via GitHub
-              Actions. Backend validated with H2 in-memory DB before shipping to production.
+              Production-style issue tracking with role-based access control and
+              clear authorization boundaries across user roles. Fully deployed
+              with CI/CD via GitHub Actions. Backend validated with H2 in-memory
+              DB before shipping to production.
             </p>
 
             <DeploymentDiagram />
@@ -464,12 +626,16 @@ function Projects() {
 
             <div className="project-links mt-4">
               <Magnetic strength={0.12}>
-                <a href="#" className="plink">
+                <a href="https://issues-deployment-tracker.vercel.app/auth" className="plink">
                   ↗ Live
                 </a>
               </Magnetic>
               <Magnetic strength={0.12}>
-                <a href="https://github.com/STRO09" target="_blank" className="plink">
+                <a
+                  href="https://github.com/STRO09/Issues-Deployment-Tracker"
+                  target="_blank"
+                  className="plink"
+                >
                   ⎋ GitHub
                 </a>
               </Magnetic>
@@ -530,8 +696,8 @@ function Skills() {
         <Reveal delay={400} className="w-full">
           <div className="skill-group">
             <div className="skill-group-title">DevOps &amp; Tools</div>
-            <SkillBar name="Docker" level="72%" />
-            <SkillBar name="GitHub Actions (CI/CD)" level="75%" />
+            <SkillBar name="Docker" level="30%" />
+            <SkillBar name="GitHub Actions (CI/CD)" level="60%" />
             <SkillBar name="Socket.IO / Real-time" level="85%" />
             <SkillBar name="Git / GitHub" level="90%" />
           </div>
@@ -553,53 +719,77 @@ function Journey() {
       </Reveal>
 
       <div className="timeline">
-        <Reveal delay={100} className="w-full">
+        {/* Forward-looking entry */}
+        <Reveal delay={50} className="w-full">
           <div className="tl-item">
-            <div className="tl-date">Nov 2025 – Present</div>
-            <div className="tl-title">Software Developer @ SlashRTC</div>
+            <div className="tl-date" style={{ color: "var(--green)" }}>
+              Jun 2026 – Present
+            </div>
+            <div className="tl-title" style={{ color: "var(--green)" }}>
+              Open to Opportunities
+            </div>
             <div className="tl-body">
-              Debugging distributed telephony systems, shipping real-time chat, navigating 15+
-              microservices in production.
+              Targeting backend/full-stack roles at early-stage funded startups.
+              Solving DSA daily, shipping side projects, actively interviewing.
             </div>
           </div>
         </Reveal>
-        <Reveal delay={200} className="w-full">
+
+        {/* SlashRTC — date fixed */}
+        <Reveal delay={100} className="w-full">
+          <div className="tl-item">
+            <div className="tl-date">Nov 2025 – May 2026</div>
+            <div className="tl-title">Software Developer @ SlashRTC</div>
+            <div className="tl-body">
+              Debugging distributed telephony systems, shipping real-time chat,
+              navigating 15+ microservices in production. Took features on a new product from
+              active dev through UAT to rollout.
+            </div>
+          </div>
+        </Reveal>
+
+        {/* rest unchanged from here */}
+        {/* <Reveal delay={200} className="w-full">
           <div className="tl-item">
             <div className="tl-date">2025</div>
             <div className="tl-title">AI Chat-App — solo project</div>
             <div className="tl-body">
-              Real-time messaging with 50ms latency, compound indexing strategy, N+1 bulk
-              aggregation fix across 500+ conversations.
+              Real-time messaging with 50ms latency, compound indexing strategy,
+              N+1 bulk aggregation fix across 500+ conversations.
             </div>
           </div>
         </Reveal>
         <Reveal delay={300} className="w-full">
           <div className="tl-item">
             <div className="tl-date">2024 – Ongoing</div>
-            <div className="tl-title">Issues &amp; Deployment Tracker — live</div>
+            <div className="tl-title">
+              Issues &amp; Deployment Tracker — live
+            </div>
             <div className="tl-body">
-              Production issue tracker with RBAC, CI/CD pipeline via GitHub Actions, full Docker
-              support, Vercel + Render deployment.
+              Production issue tracker with RBAC, CI/CD pipeline via GitHub
+              Actions, full Docker support, Vercel + Render deployment.
             </div>
           </div>
-        </Reveal>
+        </Reveal> */}
         <Reveal delay={400} className="w-full">
           <div className="tl-item">
             <div className="tl-date">Jul – Oct 2024</div>
             <div className="tl-title">Java Internship @ SDAC INFOTECH</div>
             <div className="tl-body">
-              J2EE ERP portal — learned MVC2, JDBC, stored procedures, BCrypt auth, Apache Tomcat
-              deployment end-to-end.
+              J2EE ERP portal — learned MVC2, JDBC, stored procedures, BCrypt
+              auth, Apache Tomcat deployment end-to-end.
             </div>
           </div>
         </Reveal>
         <Reveal delay={500} className="w-full">
           <div className="tl-item">
             <div className="tl-date">Dec 2021 – Jun 2025</div>
-            <div className="tl-title">B.E. in Information Technology — SFIT Mumbai</div>
+            <div className="tl-title">
+              B.E. in Information Technology — SFIT Mumbai
+            </div>
             <div className="tl-body">
-              St. Francis Institute of Technology. Built the technical foundation; started shipping
-              real products from year 2 onwards.
+              St. Francis Institute of Technology. Built the technical
+              foundation; started shipping real products from year 2 onwards.
             </div>
           </div>
         </Reveal>
@@ -628,8 +818,8 @@ function Contact({ showCopyNotice }) {
             maxWidth: "500px",
           }}
         >
-          Open to backend/full-stack roles, internships, and interesting engineering problems.
-          Based in Andheri, Mumbai.
+          Open to backend/full-stack roles, internships, and interesting
+          engineering problems. Based in Andheri, Mumbai.
         </p>
       </Reveal>
 
@@ -698,7 +888,9 @@ function Footer() {
     >
       <span>SAGAR JANJOTED · MUMBAI · 2025</span>
       <span style={{ margin: "0 12px", color: "var(--border)" }}>|</span>
-      <span style={{ color: "var(--amber)" }}>Backend · Full-Stack · Systems</span>
+      <span style={{ color: "var(--amber)" }}>
+        Backend · Full-Stack · Systems
+      </span>
     </footer>
   );
 }
@@ -707,7 +899,11 @@ export default function Home() {
   const [booting, setBooting] = useState(true);
   const [copyVisible, setCopyVisible] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0, opacity: 0 });
+  const [underlineStyle, setUnderlineStyle] = useState({
+    left: 0,
+    width: 0,
+    opacity: 0,
+  });
   const [scrollY, setScrollY] = useState(0);
 
   // Parallax tracking
@@ -757,7 +953,9 @@ export default function Home() {
       return;
     }
 
-    const activeLink = document.querySelector(`.nav-links a[href="#${activeSection}"]`);
+    const activeLink = document.querySelector(
+      `.nav-links a[href="#${activeSection}"]`,
+    );
     if (activeLink) {
       setUnderlineStyle({
         left: activeLink.offsetLeft,
@@ -787,6 +985,9 @@ export default function Home() {
 
       {/* Hero Section */}
       <Hero />
+
+      {/* What I can offer Section */}
+      <WhatIDo />
 
       {/* Metrics */}
       <Metrics />

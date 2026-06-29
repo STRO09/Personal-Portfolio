@@ -47,274 +47,219 @@ function useDiagramReveal() {
   return [ref, active, packetsActive];
 }
 
-export function TopologyDiagram() {
-  const [ref, active, packetsActive] = useDiagramReveal();
+  export function TopologyDiagram() {
+    const [ref, active, packetsActive] = useDiagramReveal();
 
-  return (
-    <div ref={ref} className="arch-diagram mt-4 select-none">
-      <div className="text-[10px] text-[var(--text3)] mb-3 tracking-wider font-mono">
-        // SYSTEM TOPOLOGY (SLASHRTC)
+    return (
+      <div ref={ref} className="arch-diagram mt-4 select-none">
+        <div className="text-[10px] text-[var(--text3)] mb-3 tracking-wider font-mono">
+          // SYSTEM TOPOLOGY — SLASHRTC (2 PRODUCTS)
+        </div>
+        <svg
+          viewBox="0 0 510 200"
+          width="100%"
+          height="100%"
+          className="font-mono"
+          style={{ overflow: "visible" }}
+        >
+          {/* ─── PRODUCT LABELS ─── */}
+          <text x="5" y="10" fill="var(--text3)" fontSize="7" letterSpacing="0.08em">
+            TELEPHONY PLATFORM · trace + debug
+          </text>
+          <text x="264" y="10" fill="var(--text3)" fontSize="7" letterSpacing="0.08em">
+            TICKET PORTAL · active dev
+          </text>
+
+          {/* Divider */}
+          <line
+            x1="254" y1="14" x2="254" y2="145"
+            stroke="var(--border)" strokeWidth="0.5" strokeDasharray="3 3"
+          />
+
+          {/* ─── CONNECTION LINES ─── */}
+          {active && (
+            <>
+              {/* CI3 → Services */}
+              <path id="tp-l1" d="M 118 45 L 118 62"
+                fill="none" stroke="var(--border2)" strokeWidth="1"
+                strokeDasharray="20" strokeDashoffset="20"
+                className="animate-draw-line" />
+              {/* JsSIP → Services */}
+              {/* <path id="tp-l2" d="M 129 45 L 129 62"
+                fill="none" stroke="var(--border2)" strokeWidth="1"
+                strokeDasharray="20" strokeDashoffset="20"
+                className="animate-draw-line" style={{ animationDelay: "150ms" }} /> */}
+              {/* Services → FreeSWITCH */}
+              <path id="tp-l3" d="M 45 98 L 45 112"
+                fill="none" stroke="var(--border2)" strokeWidth="1"
+                strokeDasharray="16" strokeDashoffset="16"
+                className="animate-draw-line" style={{ animationDelay: "300ms" }} />
+              {/* Services → Redis */}
+              <path id="tp-l4" d="M 163 98 L 163 112"
+                fill="none" stroke="var(--border2)" strokeWidth="1"
+                strokeDasharray="16" strokeDashoffset="16"
+                className="animate-draw-line" style={{ animationDelay: "420ms" }} />
+              {/* Redis Queues → Redis */}
+              <path id="tp-l5" d="M 163 139 L 100 162"
+                fill="none" stroke="var(--border2)"strokeWidth="1"
+                strokeDasharray="70" strokeDashoffset="70"
+                className="animate-draw-line" style={{ animationDelay: "520ms" }} />
+
+              {/* Redis Queues → MongoDB */}
+              <path id="tp-l6"d="M 163 139 L 163 162"
+                fill="none" stroke="var(--border2)" strokeWidth="1"
+                strokeDasharray="30" strokeDashoffset="30"
+                className="animate-draw-line" style={{ animationDelay: "620ms" }} />
+
+              {/* Redis Queues → MySQL */}
+              <path
+                id="tp-l7" d="M 163 139 L 220 162"
+                fill="none" stroke="var(--border2)" strokeWidth="1"
+                strokeDasharray="70" strokeDashoffset="70"
+                className="animate-draw-line" style={{ animationDelay: "720ms" }} />
+              {/* Services → Kamailio */}
+              {/* <path id="tp-l5" d="M 213 98 L 213 112"
+                fill="none" stroke="var(--border2)" strokeWidth="1"
+                strokeDasharray="16" strokeDashoffset="16"
+                className="animate-draw-line" style={{ animationDelay: "520ms" }} /> */}
+              {/* Next.js → Node */}
+              <path id="tp-r1" d="M 320 45 L 320 62"
+                fill="none" stroke="var(--border2)" strokeWidth="1"
+                strokeDasharray="20" strokeDashoffset="20"
+                className="animate-draw-line" style={{ animationDelay: "200ms" }} />
+              {/* Node → ScyllaDB */}
+              <path id="tp-r2" d="M 320 98 L 320 112"
+                fill="none" stroke="var(--border2)" strokeWidth="1"
+                strokeDasharray="16" strokeDashoffset="16"
+                className="animate-draw-line" style={{ animationDelay: "450ms" }} />
+            </>
+          )}
+
+          {/* ─── DATA PACKETS ─── */}
+          {packetsActive && (
+            <>
+              <circle r="2" fill="var(--amber)">
+                <animateMotion dur="0.7s" repeatCount="1" fill="freeze"><mpath href="#tp-l1" /></animateMotion>
+              </circle>
+              <circle r="2" fill="var(--amber)">
+                <animateMotion dur="0.7s" begin="0.15s" repeatCount="1" fill="freeze"><mpath href="#tp-l2" /></animateMotion>
+              </circle>
+              <circle r="2" fill="var(--red)">
+                <animateMotion dur="0.6s" begin="0.3s" repeatCount="1" fill="freeze"><mpath href="#tp-l3" /></animateMotion>
+              </circle>
+              <circle r="2" fill="var(--teal)">
+                <animateMotion dur="0.6s" begin="0.42s" repeatCount="1" fill="freeze"><mpath href="#tp-l4" /></animateMotion>
+              </circle>
+              <circle r="2" fill="var(--amber)">
+                <animateMotion dur="0.7s" begin="0.2s" repeatCount="1" fill="freeze"><mpath href="#tp-r1" /></animateMotion>
+              </circle>
+              <circle r="2" fill="var(--blue)">
+                <animateMotion dur="0.6s" begin="0.45s" repeatCount="1" fill="freeze"><mpath href="#tp-r2" /></animateMotion>
+              </circle>
+              <circle r="2" fill="var(--teal)">
+                <animateMotion dur="0.6s" begin="0.52s" repeatCount="1" fill="freeze">
+                  <mpath href="#tp-l5" />
+                </animateMotion>
+              </circle>
+
+              <circle r="2" fill="var(--green)">
+                <animateMotion dur="0.6s" begin="0.62s" repeatCount="1" fill="freeze">
+                  <mpath href="#tp-l6" />
+                </animateMotion>
+              </circle>
+
+              <circle r="2" fill="var(--blue)">
+                <animateMotion dur="0.6s" begin="0.72s" repeatCount="1" fill="freeze">
+                  <mpath href="#tp-l7" />
+                </animateMotion>
+              </circle>
+            </>
+          )}
+
+          {/* ═══ LEFT — TELEPHONY PLATFORM ═══ */}
+
+          {/* CI3 Frontend */}
+          <rect x="70" y="18" width="100" height="27" rx="4"
+            fill="var(--bg4)" stroke="var(--amber)" strokeWidth="1" />
+          <text x="120" y="31" fill="var(--amber)" fontSize="8" textAnchor="middle" fontWeight="bold">CI3 + React Frontend</text>
+          <text x="118" y="41" fill="var(--text3)" fontSize="6.5" textAnchor="middle">PHP · WEBRTC</text>
+
+          {/* JsSIP + React (browser) */}
+          {/* <rect x="91" y="18" width="78" height="27" rx="4"
+            fill="var(--bg4)" stroke="var(--border)" strokeWidth="1" />
+          <text x="130" y="30" fill="var(--text2)" fontSize="8" textAnchor="middle">JsSIP · React</text>
+          <text x="130" y="41" fill="var(--text3)" fontSize="6.5" textAnchor="middle">WebRTC · Browser</text> */}
+
+          {/* 15+ Node.js Microservices — wide */}
+          <rect x="5" y="62" width="240" height="36" rx="4"
+            fill="var(--bg4)" stroke="var(--green)" strokeWidth="1" />
+          <text x="125" y="75" fill="var(--green)" fontSize="8.5" textAnchor="middle" fontWeight="bold">
+            15+ Node.js Microservices
+          </text>
+          <text x="125" y="87" fill="var(--text3)" fontSize="6.5" textAnchor="middle">
+            calling · lead mgmt · state · reports · ESL · socket · monitor · APIs
+          </text>
+
+          {/* FreeSWITCH */}
+          <rect x="5" y="112" width="80" height="27" rx="4"
+            fill="var(--bg4)" stroke="var(--red)" strokeWidth="1" />
+          <text x="45" y="124" fill="var(--red)" fontSize="8" textAnchor="middle">FreeSWITCH</text>
+          <text x="45" y="134" fill="var(--text3)" fontSize="6.5" textAnchor="middle">ESL · Lua</text>
+
+          {/* Redis Queues */}
+          <rect x="125" y="112" width="77" height="27" rx="4"
+            fill="var(--bg4)" stroke="var(--teal)" strokeWidth="1" />
+          <text x="163" y="124" fill="var(--teal)" fontSize="8" textAnchor="middle">Redis Queues</text>
+          <text x="163" y="134" fill="var(--text3)" fontSize="6.5" textAnchor="middle">Bull</text>
+
+          {/* Redis */}
+          <rect x="75" y="162" width="50" height="27" rx="4"
+            fill="var(--bg4)" stroke="var(--teal)" strokeWidth="1" />
+          <text x="100" y="174" fill="var(--teal)" fontSize="8" textAnchor="middle">Redis</text>
+          <text x="100" y="182" fill="var(--text3)" fontSize="5.5" textAnchor="middle">Session</text>
+          <text x="100" y="187" fill="var(--text3)" fontSize="5.5" textAnchor="middle">Config</text>
+
+          {/* MongoDB */}
+          <rect x="135" y="162" width="50" height="27" rx="4"
+            fill="var(--bg4)" stroke="var(--green)" strokeWidth="1" />
+          <text x="160" y="174" fill="var(--green)" fontSize="8" textAnchor="middle">MongoDB</text>
+          <text x="160" y="184" fill="var(--text3)" fontSize="6" textAnchor="middle">Reports</text>
+
+          {/* MySQL */}
+          <rect x="195" y="162" width="50" height="27" rx="4"
+            fill="var(--bg4)" stroke="var(--blue)" strokeWidth="1" />
+          <text x="220" y="174" fill="var(--blue)" fontSize="8" textAnchor="middle">MySQL</text>
+          <text x="220" y="182" fill="var(--text3)" fontSize="5.5" textAnchor="middle">Persistent</text>
+          <text x="220" y="187" fill="var(--text3)" fontSize="5.5" textAnchor="middle">Data</text>
+          {/* Kamailio */}
+          {/* <rect x="182" y="112" width="63" height="27" rx="4"
+            fill="var(--bg4)" stroke="var(--border)" strokeWidth="1" />
+          <text x="213" y="124" fill="var(--text2)" fontSize="8" textAnchor="middle">Kamailio</text>
+          <text x="213" y="134" fill="var(--text3)" fontSize="6.5" textAnchor="middle">SIP Proxy</text> */}
+
+          {/* ═══ RIGHT — TICKET PORTAL ═══ */}
+
+          {/* Next.js */}
+          <rect x="264" y="18" width="112" height="27" rx="4"
+            fill="var(--bg4)" stroke="var(--amber)" strokeWidth="1" />
+          <text x="320" y="30" fill="var(--amber)" fontSize="8" textAnchor="middle" fontWeight="bold">Next.js · Redux</text>
+          <text x="320" y="41" fill="var(--text3)" fontSize="6.5" textAnchor="middle">Frontend</text>
+
+          {/* Node.js + Socket.IO */}
+          <rect x="264" y="62" width="128" height="36" rx="4"
+            fill="var(--bg4)" stroke="var(--green)" strokeWidth="1" />
+          <text x="328" y="75" fill="var(--green)" fontSize="8" textAnchor="middle">Node.js · Socket.IO</text>
+          <text x="328" y="87" fill="var(--text3)" fontSize="6.5" textAnchor="middle">REST API · Real-time chat</text>
+
+          {/* ScyllaDB */}
+          <rect x="264" y="112" width="112" height="27" rx="4"
+            fill="var(--bg4)" stroke="var(--blue)" strokeWidth="1" />
+          <text x="320" y="124" fill="var(--blue)" fontSize="8" textAnchor="middle">ScyllaDB</text>
+          <text x="320" y="134" fill="var(--text3)" fontSize="6.5" textAnchor="middle">Distributed store</text>
+        </svg>
       </div>
-      <svg
-        viewBox="0 0 460 140"
-        width="100%"
-        height="100%"
-        className="font-mono"
-        style={{ overflow: "visible" }}
-      >
-        {/* Connection Lines */}
-        {active && (
-          <>
-            {/* Next.js -> API Gateway */}
-            <path
-              id="t-path1"
-              d="M 90 30 L 150 30"
-              fill="none"
-              stroke="var(--border2)"
-              strokeWidth="1"
-              strokeDasharray="100"
-              strokeDashoffset="100"
-              className="animate-draw-line"
-            />
-            {/* API Gateway -> Node.js Services */}
-            <path
-              id="t-path2"
-              d="M 240 30 L 300 30"
-              fill="none"
-              stroke="var(--border2)"
-              strokeWidth="1"
-              strokeDasharray="100"
-              strokeDashoffset="100"
-              className="animate-draw-line"
-              style={{ animationDelay: "200ms" }}
-            />
-            {/* Bus Line & Down links to DBs */}
-            <path
-              id="t-path3"
-              d="M 370 45 L 370 70 M 50 70 L 370 70 M 50 70 L 50 90"
-              fill="none"
-              stroke="var(--border2)"
-              strokeWidth="1"
-              strokeDasharray="300"
-              strokeDashoffset="300"
-              className="animate-draw-line"
-              style={{ animationDelay: "400ms" }}
-            />
-            <path
-              id="t-path4"
-              d="M 155 70 L 155 90"
-              fill="none"
-              stroke="var(--border2)"
-              strokeWidth="1"
-              strokeDasharray="50"
-              strokeDashoffset="50"
-              className="animate-draw-line"
-              style={{ animationDelay: "600ms" }}
-            />
-            <path
-              id="t-path5"
-              d="M 260 70 L 260 90"
-              fill="none"
-              stroke="var(--border2)"
-              strokeWidth="1"
-              strokeDasharray="50"
-              strokeDashoffset="50"
-              className="animate-draw-line"
-              style={{ animationDelay: "600ms" }}
-            />
-            <path
-              id="t-path6"
-              d="M 370 70 L 370 90"
-              fill="none"
-              stroke="var(--border2)"
-              strokeWidth="1"
-              strokeDasharray="50"
-              strokeDashoffset="50"
-              className="animate-draw-line"
-              style={{ animationDelay: "600ms" }}
-            />
-          </>
-        )}
-
-        {/* Data Packets */}
-        {packetsActive && (
-          <>
-            <circle r="2" fill="var(--amber)">
-              <animateMotion dur="1s" repeatCount="2" fill="freeze">
-                <mpath href="#t-path1" />
-              </animateMotion>
-            </circle>
-            <circle r="2" fill="var(--green)">
-              <animateMotion dur="1.2s" begin="0.2s" repeatCount="1" fill="freeze">
-                <mpath href="#t-path2" />
-              </animateMotion>
-            </circle>
-            <circle r="2" fill="var(--teal)">
-              <animateMotion dur="1.5s" begin="0.4s" repeatCount="1" fill="freeze">
-                <mpath href="#t-path3" />
-              </animateMotion>
-            </circle>
-            <circle r="2" fill="var(--blue)">
-              <animateMotion dur="1.2s" begin="0.6s" repeatCount="1" fill="freeze">
-                <mpath href="#t-path5" />
-              </animateMotion>
-            </circle>
-          </>
-        )}
-
-        {/* Nodes */}
-        {/* Next.js UI */}
-        <rect
-          x="10"
-          y="15"
-          width="80"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--amber)"
-          strokeWidth="1"
-        />
-        <text
-          x="50"
-          y="34"
-          fill="var(--amber)"
-          fontSize="9"
-          textAnchor="middle"
-          fontWeight="bold"
-        >
-          Next.js UI
-        </text>
-
-        {/* API Gateway */}
-        <rect
-          x="150"
-          y="15"
-          width="90"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--blue)"
-          strokeWidth="1"
-        />
-        <text
-          x="195"
-          y="34"
-          fill="var(--blue)"
-          fontSize="9"
-          textAnchor="middle"
-        >
-          API Gateway
-        </text>
-
-        {/* Node.js Services */}
-        <rect
-          x="300"
-          y="15"
-          width="140"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--green)"
-          strokeWidth="1"
-        />
-        <text
-          x="370"
-          y="34"
-          fill="var(--green)"
-          fontSize="9"
-          textAnchor="middle"
-        >
-          Node Services (15+)
-        </text>
-
-        {/* Databases Row */}
-        {/* ScyllaDB */}
-        <rect
-          x="10"
-          y="90"
-          width="80"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--border)"
-          strokeWidth="1"
-        />
-        <text
-          x="50"
-          y="108"
-          fill="var(--text2)"
-          fontSize="9"
-          textAnchor="middle"
-        >
-          ScyllaDB
-        </text>
-
-        {/* MongoDB */}
-        <rect
-          x="110"
-          y="90"
-          width="80"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--border)"
-          strokeWidth="1"
-        />
-        <text
-          x="150"
-          y="108"
-          fill="var(--text2)"
-          fontSize="9"
-          textAnchor="middle"
-        >
-          MongoDB
-        </text>
-
-        {/* Redis (Bull) */}
-        <rect
-          x="210"
-          y="90"
-          width="100"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--teal)"
-          strokeWidth="1"
-        />
-        <text
-          x="260"
-          y="108"
-          fill="var(--teal)"
-          fontSize="9"
-          textAnchor="middle"
-        >
-          Redis (Bull)
-        </text>
-
-        {/* FreeSWITCH */}
-        <rect
-          x="330"
-          y="90"
-          width="110"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--border)"
-          strokeWidth="1"
-        />
-        <text
-          x="385"
-          y="108"
-          fill="var(--text2)"
-          fontSize="9"
-          textAnchor="middle"
-        >
-          FreeSWITCH
-        </text>
-      </svg>
-    </div>
-  );
-}
+    );
+  }
 
 export function RequestFlowDiagram() {
   const [ref, active, packetsActive] = useDiagramReveal();
@@ -322,222 +267,142 @@ export function RequestFlowDiagram() {
   return (
     <div ref={ref} className="arch-diagram mt-4 select-none">
       <div className="text-[10px] text-[var(--text3)] mb-3 tracking-wider font-mono">
-        // REQUEST FLOW (AI CHAT APP)
+        // AI CHAT APP — MESSAGE & DATA FLOW
       </div>
       <svg
-        viewBox="0 0 460 130"
+        viewBox="0 0 460 165"
         width="100%"
         height="100%"
         className="font-mono"
         style={{ overflow: "visible" }}
       >
-        {/* Connections */}
+        {/* Section labels */}
+        <text x="5" y="12" fill="var(--text3)" fontSize="7" letterSpacing="0.08em">
+          MESSAGE FLOW
+        </text>
+        <text x="5" y="118" fill="var(--text3)" fontSize="7" letterSpacing="0.08em">
+          N+1 FIX · UNREAD COUNTS
+        </text>
+
+        {/* Section divider */}
+        <line x1="0" y1="108" x2="460" y2="108"
+          stroke="var(--border)" strokeWidth="0.5" strokeDasharray="3 3" />
+
+        {/* ─── CONNECTION PATHS ─── */}
         {active && (
           <>
-            {/* Client -> Auth */}
-            <path
-              id="rf-path1"
-              d="M 80 25 L 140 25"
-              fill="none"
-              stroke="var(--border2)"
-              strokeWidth="1"
-              strokeDasharray="60"
-              strokeDashoffset="60"
-              className="animate-draw-line"
-            />
-            {/* Auth -> Socket.IO */}
-            <path
-              id="rf-path2"
-              d="M 220 25 L 280 25"
-              fill="none"
-              stroke="var(--border2)"
-              strokeWidth="1"
-              strokeDasharray="60"
-              strokeDashoffset="60"
-              className="animate-draw-line"
-              style={{ animationDelay: "200ms" }}
-            />
-            {/* Socket.IO -> MongoDB */}
-            <path
-              id="rf-path3"
-              d="M 370 25 L 390 25"
-              fill="none"
-              stroke="var(--border2)"
-              strokeWidth="1"
-              strokeDasharray="40"
-              strokeDashoffset="40"
-              className="animate-draw-line"
-              style={{ animationDelay: "400ms" }}
-            />
-            {/* Bulk Aggregation -> Unread Counts */}
-            <path
-              id="rf-path4"
-              d="M 280 85 L 220 85"
-              fill="none"
-              stroke="var(--border2)"
-              strokeWidth="1"
-              strokeDasharray="60"
-              strokeDashoffset="60"
-              className="animate-draw-line"
-              style={{ animationDelay: "300ms" }}
-            />
+            {/* Client → CI3 Auth */}
+            <path id="rf-n1" d="M 80 36 L 105 36"
+              fill="none" stroke="var(--border2)" strokeWidth="1"
+              strokeDasharray="25" strokeDashoffset="25"
+              className="animate-draw-line" />
+            {/* CI3 Auth → Socket.IO (JWT issued) */}
+            <path id="rf-n2" d="M 190 36 L 250 36"
+              fill="none" stroke="var(--border2)" strokeWidth="1"
+              strokeDasharray="60" strokeDashoffset="60"
+              className="animate-draw-line" style={{ animationDelay: "200ms" }} />
+            {/* Socket.IO → MongoDB */}
+            <path id="rf-n3" d="M 335 36 L 375 36"
+              fill="none" stroke="var(--border2)" strokeWidth="1"
+              strokeDasharray="40" strokeDashoffset="40"
+              className="animate-draw-line" style={{ animationDelay: "350ms" }} />
+            {/* Socket.IO ↓ Ollama */}
+            <path id="rf-n4" d="M 292 50 L 292 75"
+              fill="none" stroke="var(--border2)" strokeWidth="1"
+              strokeDasharray="25" strokeDashoffset="25"
+              className="animate-draw-line" style={{ animationDelay: "500ms" }} />
+            {/* N+1: 500+ convos → Agg Pipeline */}
+            <path id="rf-n5" d="M 85 144 L 175 144"
+              fill="none" stroke="var(--border2)" strokeWidth="1"
+              strokeDasharray="90" strokeDashoffset="90"
+              className="animate-draw-line" style={{ animationDelay: "300ms" }} />
+            {/* Agg Pipeline → Unread Counts */}
+            <path id="rf-n6" d="M 275 144 L 365 144"
+              fill="none" stroke="var(--border2)" strokeWidth="1"
+              strokeDasharray="90" strokeDashoffset="90"
+              className="animate-draw-line" style={{ animationDelay: "500ms" }} />
           </>
         )}
 
-        {/* Data Packets */}
+        {/* ─── PACKETS ─── */}
         {packetsActive && (
           <>
             <circle r="2" fill="var(--amber)">
-              <animateMotion dur="0.8s" repeatCount="1" fill="freeze">
-                <mpath href="#rf-path1" />
-              </animateMotion>
+              <animateMotion dur="0.5s" repeatCount="1" fill="freeze"><mpath href="#rf-n1" /></animateMotion>
+            </circle>
+            <circle r="2" fill="var(--amber)">
+              <animateMotion dur="0.7s" begin="0.2s" repeatCount="1" fill="freeze"><mpath href="#rf-n2" /></animateMotion>
             </circle>
             <circle r="2" fill="var(--green)">
-              <animateMotion dur="0.8s" begin="0.2s" repeatCount="1" fill="freeze">
-                <mpath href="#rf-path2" />
-              </animateMotion>
-            </circle>
-            <circle r="2" fill="var(--teal)">
-              <animateMotion dur="0.6s" begin="0.4s" repeatCount="1" fill="freeze">
-                <mpath href="#rf-path3" />
-              </animateMotion>
+              <animateMotion dur="0.5s" begin="0.35s" repeatCount="1" fill="freeze"><mpath href="#rf-n3" /></animateMotion>
             </circle>
             <circle r="2" fill="var(--blue)">
-              <animateMotion dur="0.8s" begin="0.3s" repeatCount="1" fill="freeze">
-                <mpath href="#rf-path4" />
-              </animateMotion>
+              <animateMotion dur="0.5s" begin="0.5s" repeatCount="1" fill="freeze"><mpath href="#rf-n4" /></animateMotion>
+            </circle>
+            <circle r="2" fill="var(--teal)">
+              <animateMotion dur="1s" begin="0.3s" repeatCount="1" fill="freeze"><mpath href="#rf-n5" /></animateMotion>
+            </circle>
+            <circle r="2" fill="var(--green)">
+              <animateMotion dur="1s" begin="0.5s" repeatCount="1" fill="freeze"><mpath href="#rf-n6" /></animateMotion>
             </circle>
           </>
         )}
 
-        {/* Row 1 Nodes */}
+        {/* ═══ MESSAGE FLOW NODES ═══ */}
+
         {/* Client */}
-        <rect
-          x="10"
-          y="10"
-          width="70"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--border)"
-          strokeWidth="1"
-        />
-        <text
-          x="45"
-          y="28"
-          fill="var(--text2)"
-          fontSize="9"
-          textAnchor="middle"
-        >
-          Client
-        </text>
+        <rect x="5" y="22" width="75" height="28" rx="4"
+          fill="var(--bg4)" stroke="var(--border)" strokeWidth="1" />
+        <text x="42" y="34" fill="var(--text2)" fontSize="8" textAnchor="middle">Client</text>
+        <text x="42" y="44" fill="var(--text3)" fontSize="6.5" textAnchor="middle">Browser</text>
+
+        {/* JWT label on connector */}
+        {/* <text x="220" y="30" fill="var(--text3)" fontSize="6.5" textAnchor="middle">JWT + Refresh</text>
+        <text x="222" y="45" fill="var(--text3)" fontSize="6.5" textAnchor="middle">Token Auth ✓</text> */}
 
         {/* CI3 Auth */}
-        <rect
-          x="140"
-          y="10"
-          width="80"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--amber)"
-          strokeWidth="1"
-        />
-        <text
-          x="180"
-          y="28"
-          fill="var(--amber)"
-          fontSize="9"
-          textAnchor="middle"
-          fontWeight="bold"
-        >
-          CI3 Auth
-        </text>
+        <rect x="105" y="22" width="85" height="28" rx="4"
+          fill="var(--bg4)" stroke="var(--amber)" strokeWidth="1" />
+        <text x="147" y="34" fill="var(--amber)" fontSize="8" textAnchor="middle" fontWeight="bold">CI3 Auth</text>
+        <text x="147" y="44" fill="var(--text3)" fontSize="6.5" textAnchor="middle">JWT + Refresh Token</text>
 
         {/* Socket.IO */}
-        <rect
-          x="280"
-          y="10"
-          width="90"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--green)"
-          strokeWidth="1"
-        />
-        <text
-          x="325"
-          y="28"
-          fill="var(--green)"
-          fontSize="9"
-          textAnchor="middle"
-        >
-          Socket.IO
-        </text>
+        <rect x="250" y="22" width="85" height="28" rx="4"
+          fill="var(--bg4)" stroke="var(--green)" strokeWidth="1" />
+        <text x="292" y="34" fill="var(--green)" fontSize="8" textAnchor="middle">Socket.IO</text>
+        <text x="292" y="44" fill="var(--text3)" fontSize="6.5" textAnchor="middle">real-time · 50ms</text>
 
         {/* MongoDB */}
-        <rect
-          x="390"
-          y="10"
-          width="60"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--teal)"
-          strokeWidth="1"
-        />
-        <text
-          x="420"
-          y="28"
-          fill="var(--teal)"
-          fontSize="9"
-          textAnchor="middle"
-        >
-          MongoDB
-        </text>
+        <rect x="375" y="22" width="80" height="28" rx="4"
+          fill="var(--bg4)" stroke="var(--teal)" strokeWidth="1" />
+        <text x="415" y="34" fill="var(--teal)" fontSize="8" textAnchor="middle">MongoDB</text>
+        <text x="415" y="44" fill="var(--text3)" fontSize="6.5" textAnchor="middle">compound idx</text>
 
-        {/* Row 2 Nodes */}
-        {/* Unread Counts */}
-        <rect
-          x="100"
-          y="70"
-          width="120"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--border)"
-          strokeWidth="1"
-        />
-        <text
-          x="160"
-          y="88"
-          fill="var(--text2)"
-          fontSize="9"
-          textAnchor="middle"
-        >
-          Unread Counts
-        </text>
+        {/* Ollama API */}
+        <rect x="250" y="75" width="85" height="28" rx="4"
+          fill="var(--bg4)" stroke="var(--blue)" strokeWidth="1" />
+        <text x="292" y="87" fill="var(--blue)" fontSize="8" textAnchor="middle">Ollama API</text>
+        <text x="292" y="97" fill="var(--text3)" fontSize="6.5" textAnchor="middle">AI · first-class user</text>
 
-        {/* Bulk Aggregation */}
-        <rect
-          x="280"
-          y="70"
-          width="130"
-          height="30"
-          rx="4"
-          fill="var(--bg4)"
-          stroke="var(--blue)"
-          strokeWidth="1"
-        />
-        <text
-          x="345"
-          y="88"
-          fill="var(--blue)"
-          fontSize="9"
-          textAnchor="middle"
-        >
-          Bulk Aggregation
-        </text>
+        {/* ═══ N+1 FIX NODES ═══ */}
+
+        {/* 500+ Conversations */}
+        <rect x="5" y="130" width="80" height="28" rx="4"
+          fill="var(--bg4)" stroke="var(--border)" strokeWidth="1" />
+        <text x="45" y="142" fill="var(--text2)" fontSize="8" textAnchor="middle">500+ convos</text>
+        <text x="45" y="152" fill="var(--text3)" fontSize="6.5" textAnchor="middle">MongoDB</text>
+
+        {/* Aggregation Pipeline */}
+        <rect x="175" y="130" width="100" height="28" rx="4"
+          fill="var(--bg4)" stroke="var(--amber)" strokeWidth="1" />
+        <text x="225" y="142" fill="var(--amber)" fontSize="8" textAnchor="middle" fontWeight="bold">Agg Pipeline</text>
+        <text x="225" y="152" fill="var(--text3)" fontSize="6.5" textAnchor="middle">$group · 1 round trip</text>
+
+        {/* Unread Counts result */}
+        <rect x="365" y="130" width="90" height="28" rx="4"
+          fill="var(--bg4)" stroke="var(--green)" strokeWidth="1" />
+        <text x="410" y="142" fill="var(--green)" fontSize="8" textAnchor="middle">Unread Counts</text>
+        <text x="410" y="152" fill="var(--text3)" fontSize="6.5" textAnchor="middle">N+1 resolved ✓</text>
       </svg>
     </div>
   );
