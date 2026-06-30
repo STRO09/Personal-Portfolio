@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import "./globals.css";
+import { Scroll } from "lucide-react";
 
 // Interactive primitives
 import Magnetic from "../components/ui/Magnetic";
@@ -12,6 +13,7 @@ import SkillBar from "../components/ui/SkillBar";
 import TerminalBoot from "../components/TerminalBoot";
 import ContactCard from "../components/ContactCard";
 import InteractiveTerminal from "../components/InteractiveTerminal";
+import MobileNav from "../components/MobileNav";
 import {
   TopologyDiagram,
   RequestFlowDiagram,
@@ -22,10 +24,10 @@ import {
 // Sub-components
 function Navbar({ underlineStyle }) {
   return (
-    <nav>
+    <nav className="desktop-nav">
       <div className="nav-id">
-        <div className="nav-dot"></div>
-        <span className="nav-name">SAGAR JANJOTED</span>
+        {/* <div className="nav-dot"></div> */}
+        {/* <span className="nav-name">Chasing IT.</span> */}
       </div>
       <div className="nav-links">
         {/* Active Navigation underline */}
@@ -34,7 +36,7 @@ function Navbar({ underlineStyle }) {
         <a href="#projects">Projects</a>
         <a href="#skills">Stack</a>
         <a href="#contact">Contact</a>
-        <a href="https://drive.google.com/drive/folders/1L5YIGVPIyr6R5wi5yJP4vYrN3j496soM">↗ Resume</a>
+        {/* <a href="https://drive.google.com/drive/folders/1L5YIGVPIyr6R5wi5yJP4vYrN3j496soM">↗ Resume</a> */}
       </div>
       <div className="nav-status">
         <div className="status-dot"></div>
@@ -94,6 +96,15 @@ function Hero() {
                 className="btn btn-ghost"
               >
                 LinkedIn ↗
+              </a>
+            </Magnetic>
+            <Magnetic strength={0.12}>
+              <a
+                href="https://drive.google.com/drive/folders/1L5YIGVPIyr6R5wi5yJP4vYrN3j496soM"
+                target="_blank"
+                className="btn btn-ghost"
+              >
+                Resume ↗
               </a>
             </Magnetic>
           </div>
@@ -870,6 +881,15 @@ function Contact({ showCopyNotice }) {
             onCopy={showCopyNotice}
           />
         </Reveal>
+        <Reveal delay={350} className="w-full">
+          <ContactCard
+            icon="X"
+            label="Twitter / X"
+            value="@SagarJanjoted11"
+            href="https://X.com/SagarJanjoted11"
+            onCopy={showCopyNotice}
+          />
+        </Reveal>
       </div>
     </section>
   );
@@ -983,6 +1003,7 @@ export default function Home() {
       ></div>
 
       <Navbar underlineStyle={underlineStyle} />
+      <MobileNav activeSection={activeSection} />
 
       {/* Hero Section */}
       <Hero />

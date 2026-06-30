@@ -51,8 +51,11 @@ body {
   border-radius: 2px;
 }
 
-/* NAV */
-nav {
+/* ============================
+   DESKTOP NAVBAR
+============================ */
+
+.desktop-nav {
   position: fixed;
   top: 0;
   left: 0;
@@ -67,41 +70,35 @@ nav {
   justify-content: space-between;
   height: 52px;
 }
-.nav-id {
+
+.desktop-nav .nav-id {
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.nav-dot {
+
+.desktop-nav .nav-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
   background: var(--amber);
-  animation: pulse 2.5s ease-in-out infinite;
+  animation: pulseNav 2.2s ease-in-out infinite;
 }
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(0.85);
-  }
-}
-.nav-name {
+
+.desktop-nav .nav-name {
   font-size: 13px;
   font-weight: 500;
   color: var(--amber);
   letter-spacing: 0.08em;
 }
-.nav-links {
+
+.desktop-nav .nav-links {
   display: flex;
   gap: 1.5rem;
   position: relative;
 }
-.nav-active-pill {
+
+.desktop-nav .nav-active-pill {
   position: absolute;
   bottom: -6px;
   height: 2px;
@@ -112,7 +109,8 @@ nav {
     opacity 0.25s ease;
   pointer-events: none;
 }
-.nav-links a {
+
+.desktop-nav .nav-links a {
   font-size: 11px;
   color: var(--text2);
   text-decoration: none;
@@ -120,31 +118,25 @@ nav {
   text-transform: uppercase;
   transition: color 0.2s;
 }
-.nav-links a:hover {
+
+.desktop-nav .nav-links a:hover {
   color: var(--amber);
 }
-.nav-status {
+
+.desktop-nav .nav-status {
   font-size: 11px;
   color: var(--green);
   display: flex;
   align-items: center;
   gap: 6px;
 }
-.status-dot {
-  width: 5px;
-  height: 5px;
+
+.desktop-nav .status-dot {
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--green);
   animation: blink 1.8s ease-in-out infinite;
-}
-@keyframes blink {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.2;
-  }
 }
 
 /* LAYOUT */
@@ -1010,4 +1002,89 @@ h1 {
   .wib-grid {
     grid-template-columns: 1fr;
   }
+}
+/* ============================
+   MOBILE PILL NAV
+============================ */
+
+.wheel-nav {
+  display: none;
+}
+
+@media (max-width: 720px) {
+  .desktop-nav {
+    display: none;
+  }
+  .wheel-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 18px;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .pill-bar {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(17, 17, 17, 0.92);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    max-width: calc(100vw - 24px);
+  }
+
+  .pill-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: var(--text2);
+    height: 40px;
+    padding: 0 12px;
+    border-radius: 999px;
+    transition:
+      background 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.3s,
+      padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pill-icon {
+    width: 18px;
+    flex-shrink: 0;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pill-item:not(.active) {
+    width: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .pill-item.active {
+    background: var(--amber);
+    color: #0d0d0d;
+  }
+
+  .pill-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    font-family: var(--mono);
+  }
+
+  body {
+    padding-bottom: 90px;
+  }
+
 }
