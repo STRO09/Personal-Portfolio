@@ -185,11 +185,7 @@ body {
 }
 
 /* ─── Hero Image Wrapper (scroll-driven left-shift) ──────────────── */
-.hero-image-wrapper {
-  --image-width: 280px;
-  --translate-x: 0px;
-  --image-scale: calc(1.3 - var(--phase1) * 0.3);
-}
+
 
 @media (min-width: 640px) {
   .hero-image-wrapper {
@@ -217,48 +213,43 @@ body {
 }
 
 /* ─── Profile Hero Root ───────────────────────────────────────────── */
-/*
-  The root matches the photo frame size exactly.
-  overflow: visible so the name text can bleed left/right of the photo.
-  The hero-image-wrapper clips nothing — bleed is intentional.
-*/
 .profile-hero-root {
-  width: 200px;
-  height: 280px;
+  width: 240px;
+  height: 240px;
   overflow: visible;
 }
 
 @media (min-width: 640px) {
   .profile-hero-root {
-    width: 260px;
-    height: 360px;
+    width: 320px;
+    height: 320px;
   }
 }
 
 @media (min-width: 768px) {
   .profile-hero-root {
-    width: 320px;
-    height: 440px;
+    width: 400px;
+    height: 400px;
   }
 }
 
 /* ─── Photo Frame ─────────────────────────────────────────────────── */
 .profile-photo-frame {
-  width: 200px;
-  height: 280px;
+  width: 240px;
+  height: 240px;
 }
 
 @media (min-width: 640px) {
   .profile-photo-frame {
-    width: 260px;
-    height: 360px;
+    width: 320px;
+    height: 320px;
   }
 }
 
 @media (min-width: 768px) {
   .profile-photo-frame {
-    width: 320px;
-    height: 440px;
+    width: 400px;
+    height: 400px;
   }
 }
 

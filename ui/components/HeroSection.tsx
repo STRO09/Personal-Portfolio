@@ -51,7 +51,7 @@ export default function HeroSection() {
         </div>
         */}
 
-        <div className="relative w-full h-full max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center justify-center md:justify-between gap-8 md:gap-12">
+        <div className="relative w-full h-full max-w-none mx-auto px-6 flex flex-col md:flex-row items-center justify-center md:justify-between gap-8 md:gap-12">
 
           {/* Profile hero */}
           <div
@@ -83,11 +83,11 @@ export default function HeroSection() {
               <div className="flex flex-col gap-2 items-center md:items-start">
                 <div className="flex items-center gap-2 text-indigo-400 text-xs font-semibold uppercase tracking-widest">
                   <Briefcase className="h-3.5 w-3.5" />
-                  Full-Stack Developer &amp; Designer
+                  Software Developer
                 </div>
                 <div className="flex items-center gap-1.5 text-zinc-500 text-xs">
                   <MapPin className="h-3 w-3" />
-                  India — open to remote worldwide
+                  Mumbai, India — open to remote
                 </div>
               </div>
 
@@ -95,20 +95,20 @@ export default function HeroSection() {
 
               <div className="flex flex-col gap-3">
                 <p className="text-zinc-200 text-base leading-relaxed">
-                  I craft <span className="text-indigo-400 font-medium">high-performance</span> digital
-                  experiences — combining precise engineering with a deep sense of visual design.
+                  I build <span className="text-indigo-400 font-medium">scalable backend systems</span> and
+                  full-stack features — from REST APIs and real-time pipelines to clean React/Next.js UIs.
                 </p>
                 <p className="text-zinc-400 text-sm leading-relaxed">
-                  From interactive UI systems and 3D web experiences to real-time data dashboards,
-                  I build things that are both technically solid and genuinely beautiful.
+                  Currently working on a distributed telephony platform spanning 15+ Node.js microservices,
+                  Redis queues, and FreeSWITCH — shipping features from active development through to production.
                 </p>
               </div>
 
               <div className="grid grid-cols-3 gap-4 py-4 border-t border-b border-white/5 w-full">
                 {[
-                  { value: "3+", label: "Years Building" },
-                  { value: "20+", label: "Projects Shipped" },
-                  { value: "5★", label: "Client Rating" },
+                  { value: "15+", label: "Microservices" },
+                  { value: "150+", label: "DSA Problems" },
+                  { value: "3", label: "Shipped Projects" },
                 ].map((s) => (
                   <div key={s.label} className="flex flex-col gap-0.5">
                     <span className="text-xl font-bold text-white">{s.value}</span>
